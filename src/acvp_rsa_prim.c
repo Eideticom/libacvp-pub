@@ -1090,8 +1090,25 @@ ACVP_RESULT acvp_rsa_sigprim_kat_handler(ACVP_CTX *ctx, JSON_Object *obj) {
                     goto err;
                 }
 
-                if (strnlen_s(d_str, ACVP_RSA_EXP_LEN_MAX + 1) > ACVP_RSA_EXP_LEN_MAX) {
-                    ACVP_LOG_ERR("server provided d of invalid length");
+                rv = acvp_tc_json_get_string(ctx, alg_id, testobj, "p", &p_str);
+                if (rv != ACVP_SUCCESS) {
+                    json_value_free(r_tval);
+                    goto err;
+                }
+
+                rv = acvp_tc_json_get_string(ctx, alg_id, testobj, "q", &q_str);
+                if (rv != ACVP_SUCCESS) {
+                    json_value_free(r_tval);
+                    goto err;
+                }
+
+                if ((strnlen_s(p_str, ACVP_RSA_EXP_LEN_MAX + 1) > ACVP_RSA_EXP_LEN_MAX) ||
+                    (strnlen_s(q_str, ACVP_RSA_EXP_LEN_MAX + 1) > ACVP_RSA_EXP_LEN_MAX) ||
+		    (strnlen_s(d_str, ACVP_RSA_EXP_LEN_MAX + 1) > ACVP_RSA_EXP_LEN_MAX)) {
+                    ACVP_LOG_ERR("server provided p/q/d of invalid length");
+		    rv = ACVP_INVALID_ARG;
+		    json_value_free(r_tval);
+		    goto err;
                 }
             }
 
