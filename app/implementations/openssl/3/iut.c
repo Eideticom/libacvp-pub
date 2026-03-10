@@ -91,14 +91,6 @@ ACVP_RESULT iut_setup(APP_CONFIG *cfg) {
             printf("Error getting FIPS provider version number\n");
             return ACVP_INTERNAL_ERR;
         }
-    } else {
-        printf("***********************************************************************************\n");
-        printf("* WARNING: You have chosen to not fetch the FIPS provider for this run. Any tests *\n");
-        printf("* created or performed during this run MUST NOT have any validation requested     *\n");
-        printf("* on it. Proceed at your own risk. Continuing in 5 seconds...                     *\n");
-        printf("***********************************************************************************\n");
-        printf("\n");
-        acvp_sleep(5);
     }
 
     // Check if the provider has DSA disabled; other conditional algorithm flags can be checked here in the future if needed
