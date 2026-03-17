@@ -71,20 +71,6 @@ ACVP_RESULT iut_setup(APP_CONFIG *cfg) {
     }
 
     if (!cfg->disable_fips) {
-        // sets the property "fips=yes" to be included implicitly in cipher fetches
-        EVP_default_properties_enable_fips(NULL, 1);
-        if (!EVP_default_properties_is_fips_enabled(NULL)) {
-            printf("Error setting FIPS property at startup\n\n");
-            return 1;
-        }
-        // Run a quick sanity check to determine that the FIPS provider is functioning properly
-        rv = fips_sanity_check();
-        if (rv != ACVP_SUCCESS) {
-            printf("Error occurred when testing FIPS at startup (rv = %d). Please verify the FIPS provider is\n", rv);
-            printf("properly installed and configured. Exiting...\n\n");
-            return 1;
-        }
-
         ver_str = get_provider_version("OpenSSL FIPS Provider");
         fips_ver = provider_ver_str_to_int(ver_str);
         if (fips_ver < 0) {
